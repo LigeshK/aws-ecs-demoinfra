@@ -38,8 +38,8 @@ jobs:
           aws sts get-caller-identity # Verify credentials work
 
       # Step: Deploy network stack
-      #- name: Deploy CloudFormation network stack
-      #  run: aws cloudformation deploy --template-file templates/network-stack.cf.yml --stack-name ecs-network-stack --region us-east-1
+      - name: Deploy CloudFormation network stack
+        run: aws cloudformation deploy --template-file templates/network-stack.cf.yml --stack-name ecs-network-stack --region us-east-1
 
       # Step: Deploy ECS stack
       # - name: Deploy CloudFormation ECS stack
