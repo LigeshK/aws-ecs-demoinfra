@@ -1,10 +1,10 @@
-# ECS Workshop Infrastructure
+# AWS Containerisation - ECS Workshop Infrastructure
 
-A fully integrated AWS infrastructure design for deploying a two-tier microservice application using Amazon ECS (Fargate), supported by an Application Load Balancer and a suite of complementary AWS services.
+A fully integrated AWS infrastructure for deploying a two-tier microservices application on Amazon ECS (Fargate), leveraging an Application Load Balancer and a comprehensive set of AWS services.
 
 ## Architecture Overview
 
-This infrastructure creates a highly available, scalable, and secure environment for containerized applications across multiple availability zones.
+Designed for high availability, scalability, and security, this infrastructure runs containerized applications across multiple Availability Zones.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────────┐
@@ -139,14 +139,14 @@ The infrastructure deploys automatically via GitHub Actions when code is pushed 
 aws cloudformation deploy \
   --template-file templates/network-stack.cf.yml \
   --stack-name ecs-network-stack \
-  --region us-east-1
+  --region ap-southeast-2
 
 # Deploy ECS stack (after network stack completes)
 aws cloudformation deploy \
   --template-file templates/ecs-stack.cf.yml \
   --stack-name ecs-app-stack \
   --capabilities CAPABILITY_IAM \
-  --region us-east-1 \
+  --region ap-southeast-2 \
   --parameter-overrides \
     VpcId=$(aws cloudformation describe-stacks --stack-name ecs-network-stack --query "Stacks[0].Outputs[?OutputKey=='VpcId'].OutputValue" --output text) \
     PublicSubnet1Id=$(aws cloudformation describe-stacks --stack-name ecs-network-stack --query "Stacks[0].Outputs[?OutputKey=='PublicSubnet1Id'].OutputValue" --output text) \
@@ -215,16 +215,8 @@ After successful deployment, the ECS stack provides:
 
 ## Application Deployment
 
-For deploying the 2-tier application (frontend and backend) on this ECS cluster, follow the instructions in the companion repository:
+To deploy the two-tier application (frontend and backend) on this ECS cluster, follow the instructions in the companion repository:
 
-**📦 [ECS Workshop Application Repository](https://github.com/himanshurgit/ecsworkshop-app.git)**
+**📦 [ECS Workshop - Application Repository](https://github.com/LigeshK/aws-ecs-demoapp.git)**
 
-This repository contains the Dockerized frontend and backend applications along with CI/CD pipelines to build, push to ECR, and deploy to the ECS cluster created by this infrastructure.
-
-## Next Steps
-
-1. Deploy application containers to ECR repository using the app repository above
-2. Update ECS service desired count to start tasks
-3. Configure custom domain and SSL certificate
-4. Set up monitoring alerts and dashboards
-5. Implement auto-scaling policies
+This repository includes Dockerized frontend and backend applications, along with CI/CD pipelines for building, pushing to Amazon ECR, and deploying to the ECS cluster provisioned by this infrastructure.

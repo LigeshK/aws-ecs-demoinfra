@@ -1,4 +1,4 @@
-AWSTemplateFormatVersion: '2010-09-09'
+AWSTemplateFormatVersion: "2010-09-09"
 Description: ECS cluster, services, ALB, and ECR for 2-tier app
 
 ## Parameters: Import network stack outputs for VPC and subnets
@@ -39,7 +39,7 @@ Resources:
     Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
-        Version: '2012-10-17'
+        Version: "2012-10-17"
         Statement:
           - Effect: Allow
             Principal:
@@ -53,7 +53,7 @@ Resources:
     Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
-        Version: '2012-10-17'
+        Version: "2012-10-17"
         Statement:
           - Effect: Allow
             Principal:
@@ -148,11 +148,10 @@ Resources:
       Priority: 1
       Conditions:
         - Field: path-pattern
-          Values: ['/api*'] # Match API paths
+          Values: ["/api*"] # Match API paths
       Actions:
         - Type: forward
           TargetGroupArn: !Ref BackendTargetGroup
-
 
   # Backend Service Discovery: Registers backend service with Service Discovery
   # This allows other services to discover the backend service
@@ -175,12 +174,12 @@ Resources:
       NetworkMode: awsvpc # Fargate networking mode
       RequiresCompatibilities:
         - FARGATE # Use serverless Fargate
-      Cpu: '256' # Small CPU allocation
-      Memory: '512' # Small memory allocation
+      Cpu: "256" # Small CPU allocation
+      Memory: "512" # Small memory allocation
       ExecutionRoleArn: !GetAtt ECSTaskExecutionRole.Arn
       ContainerDefinitions:
         - Name: frontend
-          Image: !Sub '${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/my-app-repo:frontend-latest'
+          Image: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/my-app-repo:frontend-latest"
           Essential: true # Container must run
           PortMappings:
             - ContainerPort: 80 # Expose frontend port
@@ -199,12 +198,12 @@ Resources:
       NetworkMode: awsvpc
       RequiresCompatibilities:
         - FARGATE
-      Cpu: '256'
-      Memory: '512'
+      Cpu: "256"
+      Memory: "512"
       ExecutionRoleArn: !GetAtt ECSTaskExecutionRole.Arn
       ContainerDefinitions:
         - Name: backend
-          Image: !Sub '${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/my-app-repo:backend-latest'
+          Image: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/my-app-repo:backend-latest"
           Essential: true
           PortMappings:
             - ContainerPort: 3000 # Expose backend port
@@ -214,7 +213,6 @@ Resources:
               awslogs-group: /ecs/backend
               awslogs-region: !Ref AWS::Region
               awslogs-stream-prefix: backend
-
 
   # ECS Service: Runs frontend tasks (deferred until images are ready)
   FrontendService:
@@ -289,4 +287,4 @@ Outputs:
     Value: !GetAtt ALB.DNSName
   ECRRepositoryURI:
     Description: URI of the ECR repository
-    Value: !Sub '${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/my-app-repo'
+    Value: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/my-app-repo"
