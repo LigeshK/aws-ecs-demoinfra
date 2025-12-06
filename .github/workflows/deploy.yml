@@ -37,10 +37,10 @@ jobs:
           aws --version # Print AWS CLI version
           aws sts get-caller-identity # Verify credentials work
 
-      # Step: Deploy network stack
-      - name: Deploy CloudFormation network stack
-        run: aws cloudformation deploy --template-file templates/network-stack.cf.yml --stack-name ecs-network-stack --region ap-southeast-2
+      # # Step: Deploy network stack
+      # - name: Deploy CloudFormation network stack
+      #   run: aws cloudformation deploy --template-file templates/network-stack.cf.yml --stack-name ecs-network-stack --region ap-southeast-2
 
-      # # Step: Deploy ECS stack
-      # - name: Deploy CloudFormation ECS stack
-      #   run: aws cloudformation deploy --template-file templates/ecs-stack.cf.yml --stack-name ecs-app-stack --capabilities CAPABILITY_IAM --region ap-southeast-2 --parameter-overrides VpcId=$(aws cloudformation describe-stacks --stack-name ecs-network-stack --query "Stacks[0].Outputs[?OutputKey=='VpcId'].OutputValue" --output text) PublicSubnet1Id=$(aws cloudformation describe-stacks --stack-name ecs-network-stack --query "Stacks[0].Outputs[?OutputKey=='PublicSubnet1Id'].OutputValue" --output text) PublicSubnet2Id=$(aws cloudformation describe-stacks --stack-name ecs-network-stack --query "Stacks[0].Outputs[?OutputKey=='PublicSubnet2Id'].OutputValue" --output text) PrivateSubnet1Id=$(aws cloudformation describe-stacks --stack-name ecs-network-stack --query "Stacks[0].Outputs[?OutputKey=='PrivateSubnet1Id'].OutputValue" --output text) PrivateSubnet2Id=$(aws cloudformation describe-stacks --stack-name ecs-network-stack --query "Stacks[0].Outputs[?OutputKey=='PrivateSubnet2Id'].OutputValue" --output text)
+      # Step: Deploy ECS stack
+      - name: Deploy CloudFormation ECS stack
+        run: aws cloudformation deploy --template-file templates/ecs-stack.cf.yml --stack-name ecs-app-stack --capabilities CAPABILITY_IAM --region ap-southeast-2 --parameter-overrides VpcId=$(aws cloudformation describe-stacks --stack-name ecs-network-stack --query "Stacks[0].Outputs[?OutputKey=='VpcId'].OutputValue" --output text) PublicSubnet1Id=$(aws cloudformation describe-stacks --stack-name ecs-network-stack --query "Stacks[0].Outputs[?OutputKey=='PublicSubnet1Id'].OutputValue" --output text) PublicSubnet2Id=$(aws cloudformation describe-stacks --stack-name ecs-network-stack --query "Stacks[0].Outputs[?OutputKey=='PublicSubnet2Id'].OutputValue" --output text) PrivateSubnet1Id=$(aws cloudformation describe-stacks --stack-name ecs-network-stack --query "Stacks[0].Outputs[?OutputKey=='PrivateSubnet1Id'].OutputValue" --output text) PrivateSubnet2Id=$(aws cloudformation describe-stacks --stack-name ecs-network-stack --query "Stacks[0].Outputs[?OutputKey=='PrivateSubnet2Id'].OutputValue" --output text)
