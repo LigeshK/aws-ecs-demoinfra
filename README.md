@@ -2,6 +2,16 @@
 
 A fully integrated AWS infrastructure for deploying a two-tier microservices application on Amazon ECS (Fargate), leveraging an Application Load Balancer and a comprehensive set of AWS services.
 
+# Summary
+
+In this workshop, we will walk through how to deploy a simple full-stack containerized application on AWS using ECS with Fargate. The application consists of a lightweight frontend and backend, designed primarily to help you understand the deployment workflow rather than provide full business functionality. The frontend is a basic React or HTML page that sends a request to a .NET Core backend API running on port 3000. Its role is to perform a health check and confirm whether the backend is reachable. If the API responds successfully, the frontend displays an “OK” message.
+
+This application runs inside an Amazon ECS cluster, illustrated in the architecture using a dotted boundary. Within ECS, workloads run as Tasks, which are similar to Kubernetes Pods. Each Task contains one or more containers. For compute, we will be using AWS Fargate, a fully managed serverless platform for running containers. With Fargate, you do not manage any EC2 instances, operating systems, patching, or scaling infrastructure. Instead, AWS provisions and manages the compute environment. Although this drastically simplifies operations, Fargate does come with technical limitations, so you should always ensure it aligns with your application’s requirements. As an alternative, ECS can also run Tasks on self-managed EC2 instances, giving more control but requiring more maintenance.
+
+To expose the application to users, the frontend is integrated with an Elastic Load Balancer (ELB). The ECS Service handles the registration of running backend Tasks with the load balancer so traffic flows smoothly to the container instances. When the application must be publicly accessible, the load balancer is deployed in a public subnet. For internal-only traffic within an organization or VPC, a private subnet is recommended.
+
+Deployment begins on the developer’s machine using Docker. Developers build and test the application locally, then package it into a container image. The image is pushed to Amazon ECR (Elastic Container Registry), which serves as a secure repository for container images. The ECS cluster then pulls the latest image and deploys updated containers. This workflow integrates naturally with CI/CD systems. In this workshop, we will use GitHub Actions to automate image builds, pushes, and ECS deployments, demonstrating a complete end-to-end container deployment pipeline on AWS.
+
 ## Architecture Overview
 
 Designed for high availability, scalability, and security, this infrastructure runs containerized applications across multiple Availability Zones.
