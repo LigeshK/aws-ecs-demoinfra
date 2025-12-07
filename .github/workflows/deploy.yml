@@ -37,7 +37,7 @@ jobs:
           aws --version # Print AWS CLI version
           aws sts get-caller-identity # Verify credentials work
 
-      # # Step: Deploy network stack
+      # ## Step: Deploy network stack
       # - name: Deploy CloudFormation network stack
       #   run: aws cloudformation deploy --template-file templates/network-stack.cf.yml --stack-name ecs-network-stack --region ap-southeast-2
 
